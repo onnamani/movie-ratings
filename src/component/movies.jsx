@@ -8,12 +8,16 @@ import Genres from "./common/genres";
 
 class Movies extends Component {
   state = {
-    movies: getMovies(),
-    genre: getGenres(),
+    movies: [],
+    genres: [],
     pageSize: 4,
     currentPage: 1,
-    currentGenre: "Action"
+    currentGenre: "Action",
   };
+
+  componentDidMount() {
+    this.setState({ movies: getMovies(), genres: getGenres() })
+  }
 
   handleDelete = (movie) => {
     const movies = this.state.movies.filter((m) => m._id !== movie._id);
@@ -35,7 +39,13 @@ class Movies extends Component {
 
   render() {
     const { length: count } = this.state.movies;
-    const { pageSize, currentPage, movies: allMovies, currentGenre } = this.state;
+    const {
+      pageSize,
+      currentPage,
+      movies: allMovies,
+      currentGenre,
+      genres,
+    } = this.state;
 
     if (count === 0)
       return <p className="m-2 p-4">There are no movies in the database</p>;
@@ -44,12 +54,15 @@ class Movies extends Component {
     // console.log(movies)
 
     return (
-      <div className="container d-flex justify-content-center align-content-center">
-        <Genres
-        currentGenre={currentGenre}
-         />
-
-        <div className="ml-2 container">
+      <div className="row">
+        <div className="col-2 mt-3">
+          <Genres
+            currentGenre={currentGenre}
+            genres={genres}
+            onGenreChange={this.changeGenreList}
+          />
+        </div>
+        <div className="col">
           <p className="m-2 p-2">Showing {count} movies in the database</p>
           <table className="table">
             <thead>
@@ -95,7 +108,6 @@ class Movies extends Component {
             onPageChange={this.handlePageChange}
           />
         </div>
-        
       </div>
     );
   }
