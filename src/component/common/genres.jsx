@@ -4,7 +4,7 @@ const Genres = props => {
   const { genres, onGenreChange, textProperty, valueProperty } = props
   return (
     <div>
-      <ul className="list-group mt-3">
+      <ul className="list-group">
         <li key="all" className="list-group-item active" onClick={onGenreChange}>
           All Genres
         </li>
@@ -17,5 +17,10 @@ const Genres = props => {
     </div>
   );
 };
+
+Genres.defaultProps = {
+  textProperty: 'name',
+  valueProperty: '_id'
+}
 
 export default Genres;

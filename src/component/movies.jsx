@@ -57,13 +57,11 @@ class Movies extends Component {
     // console.log(movies)
 
     return (
-      <div className="row">
+      <div className="row ml-2 mr-2">
         <div className="col-2 mt-3">
           <Genres
             genres={genres}
             onGenreChange={this.changeGenreList}
-            textProperty="name"
-            valueProperty="_id"
           />
         </div>
         <div className="col">
