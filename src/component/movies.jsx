@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
+import { paginate } from '../utils/paginate'
 
 
 class Movies extends Component {
@@ -21,7 +22,7 @@ class Movies extends Component {
     const index = movies.indexOf(movie);
     movies[index] = { ...movie };
     movies[index].liked = !movies[index].liked;
-    console.log(movies[index].liked);
+    // console.log(movies[index].liked);
     this.setState({ movies });
   };
 
@@ -31,11 +32,13 @@ class Movies extends Component {
 
   render() {
     const { length: count } = this.state.movies;
-    const { pageSize, currentPage } = this.state
+    let { pageSize, currentPage, movies: allMovies } = this.state
 
     if (count === 0)
       return <p className="m-2 p-4">There are no movies in the database</p>;
 
+    const movies = paginate(allMovies, currentPage, pageSize)
+    // console.log(movies)
 
     return (
       <div className="container">
@@ -52,7 +55,7 @@ class Movies extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.movies.map((movie) => (
+            {movies.map((movie) => (
               <tr key={movie._id}>
                 <td>{movie.title}</td>
                 <td>{movie.genre.name}</td>
