@@ -11,8 +11,7 @@ class Movies extends Component {
     movies: [],
     genres: [],
     pageSize: 4,
-    currentPage: 1,
-    currentGenre: "Action",
+    currentPage: 1
   };
 
   componentDidMount() {
@@ -39,12 +38,12 @@ class Movies extends Component {
 
   changeGenreList = (genreSelected = undefined) => {
     if (genreSelected === undefined) {
-      this.setState({ selectedGenre: undefined, movies: getMovies() });
+      this.setState({ selectedGenre: undefined, movies: getMovies(), currentPage: 1 });
     } else {
       const tempMovies = getMovies().filter(
         (movie) => movie.genre.name === genreSelected.name
       );
-      this.setState({ selectedGenre: genreSelected, movies: tempMovies });
+      this.setState({ selectedGenre: genreSelected, movies: tempMovies, currentPage: 1 });
     }
   };
 
