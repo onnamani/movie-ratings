@@ -1,15 +1,16 @@
 import React from "react";
 
-const Genres = ({ genres }) => {
+const Genres = props => {
+  const { genres, onGenreChange, textProperty, valueProperty } = props
   return (
     <div>
       <ul className="list-group mt-3">
-        <li key="all" className="list-group-item active">
+        <li key="all" className="list-group-item active" onClick={onGenreChange}>
           All Genres
         </li>
         {genres.map((genre) => (
-          <li key={genre._id} className="list-group-item">
-            {genre.name}
+          <li key={genre[valueProperty]} className="list-group-item">
+            {genre[textProperty]}
           </li>
         ))}
       </ul>

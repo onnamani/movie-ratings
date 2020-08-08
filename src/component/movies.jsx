@@ -37,13 +37,16 @@ class Movies extends Component {
     this.setState({ currentPage: page });
   };
 
+  changeGenreList = (selectedGenre) => {
+    console.log(selectedGenre)
+  }
+
   render() {
     const { length: count } = this.state.movies;
     const {
       pageSize,
       currentPage,
       movies: allMovies,
-      currentGenre,
       genres,
     } = this.state;
 
@@ -57,9 +60,10 @@ class Movies extends Component {
       <div className="row">
         <div className="col-2 mt-3">
           <Genres
-            currentGenre={currentGenre}
             genres={genres}
             onGenreChange={this.changeGenreList}
+            textProperty="name"
+            valueProperty="_id"
           />
         </div>
         <div className="col">
