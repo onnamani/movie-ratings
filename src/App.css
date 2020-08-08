@@ -8,8 +8,13 @@
 }
 
 i.heart, 
-.pagination .page-link {
+.pagination .page-link,
+.list-group-item {
   cursor: pointer;
+}
+
+.list-group-item {
+  min-width: 100%;
 }
 
 
