@@ -16,7 +16,7 @@ class Movies extends Component {
   };
 
   componentDidMount() {
-    this.setState({ movies: getMovies(), genres: getGenres() })
+    this.setState({ movies: getMovies(), genres: getGenres() });
   }
 
   handleDelete = (movie) => {
@@ -37,18 +37,20 @@ class Movies extends Component {
     this.setState({ currentPage: page });
   };
 
-  changeGenreList = (selectedGenre) => {
-    console.log(selectedGenre)
-  }
+  changeGenreList = (genreSelected = undefined) => {
+    if (genreSelected === undefined) {
+      this.setState({ selectedGenre: undefined, movies: getMovies() });
+    } else {
+      const tempMovies = getMovies().filter(
+        (movie) => movie.genre.name === genreSelected.name
+      );
+      this.setState({ selectedGenre: genreSelected, movies: tempMovies });
+    }
+  };
 
   render() {
     const { length: count } = this.state.movies;
-    const {
-      pageSize,
-      currentPage,
-      movies: allMovies,
-      genres,
-    } = this.state;
+    const { pageSize, currentPage, movies: allMovies, genres } = this.state;
 
     if (count === 0)
       return <p className="m-2 p-4">There are no movies in the database</p>;
@@ -62,6 +64,7 @@ class Movies extends Component {
           <Genres
             genres={genres}
             onGenreChange={this.changeGenreList}
+            selectedGenre={this.state.selectedGenre}
           />
         </div>
         <div className="col">
