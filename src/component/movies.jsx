@@ -3,6 +3,7 @@ import { getMovies } from "../services/fakeMovieService";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
 
+
 class Movies extends Component {
   state = {
     movies: getMovies(),
