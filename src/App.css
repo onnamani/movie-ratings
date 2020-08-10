@@ -9,7 +9,8 @@
 
 i.heart, 
 .pagination .page-link,
-.list-group-item {
+.list-group-item,
+.clickable {
   cursor: pointer;
 }
 
