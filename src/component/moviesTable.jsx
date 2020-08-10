@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import TableHeader from "./common/tableHeader";
+import TableBody from "./common/tableBody";
 import Like from "./common/like";
 
 class MoviesTable extends Component {
@@ -7,13 +8,28 @@ class MoviesTable extends Component {
     { path: "title", label: "Title" },
     { path: "genre.name", label: "Genre" },
     { path: "numberInStock", label: "Stock" },
-    { path: "dailRentalRate", label: "Rate" },
-    { key: 'like' },
-    { key: 'delte' },
+    { path: "dailyRentalRate", label: "Rate" },
+    {
+      key: "like",
+      content: (movie) => (
+        <Like onClick={() => this.props.onLike(movie)} liked={movie.liked} />
+      ),
+    },
+    {
+      key: "delete",
+      content: (movie) => (
+        <button
+          onClick={() => this.props.onDelete(movie)}
+          className="btn btn-danger btn-sm"
+        >
+          Delete
+        </button>
+      ),
+    },
   ];
 
   render() {
-    const { movies, onDelete, onLike, onSort, sortColumn } = this.props;
+    const { movies, onSort, sortColumn } = this.props;
 
     return (
       <table className="table">
@@ -22,28 +38,7 @@ class MoviesTable extends Component {
           sortColumn={sortColumn}
           onSort={onSort}
         />
-        <tbody>
-          {movies.map((movie) => (
-            <tr key={movie._id}>
-              <td>{movie.title}</td>
-              <td>{movie.genre.name}</td>
-              <td>{movie.numberInStock}</td>
-              <td>{movie.dailyRentalRate}</td>
-              <td>
-                <Like onClick={() => onLike(movie)} liked={movie.liked} />
-              </td>
-
-              <td>
-                <button
-                  onClick={() => onDelete(movie)}
-                  className="btn btn-danger btn-sm"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <TableBody data={movies} columns={this.columns} />
       </table>
     );
   }
