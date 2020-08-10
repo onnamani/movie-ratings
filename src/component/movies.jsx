@@ -4,7 +4,7 @@ import { getGenres } from "../services/fakeGenreService";
 import { paginate } from "../utils/paginate";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
-import Genres from "./common/genres";
+import Listgroup from "./common/listgroup";
 
 class Movies extends Component {
   state = {
@@ -15,15 +15,16 @@ class Movies extends Component {
   };
 
   componentDidMount() {
-    this.setState({ movies: getMovies(), genres: getGenres() });
+    const genres = [{ name: 'All Genres' }, ...getGenres()]
+    this.setState({ movies: getMovies(), genres });
   }
 
-  handleDelete = (movie) => {
+  handleDelete = movie => {
     const movies = this.state.movies.filter((m) => m._id !== movie._id);
     this.setState({ movies: movies });
   };
 
-  handleLike = (movie) => {
+  handleLike = movie => {
     const movies = [...this.state.movies];
     const index = movies.indexOf(movie);
     movies[index] = { ...movie };
@@ -32,42 +33,39 @@ class Movies extends Component {
     this.setState({ movies });
   };
 
-  handlePageChange = (page) => {
+  handlePageChange = page => {
     this.setState({ currentPage: page });
   };
 
-  changeGenreList = (genreSelected = undefined) => {
-    if (genreSelected === undefined) {
-      this.setState({ selectedGenre: undefined, movies: getMovies(), currentPage: 1 });
-    } else {
-      const tempMovies = getMovies().filter(
-        (movie) => movie.genre.name === genreSelected.name
-      );
-      this.setState({ selectedGenre: genreSelected, movies: tempMovies, currentPage: 1 });
-    }
-  };
+  handleGenreSelect = genre => {
+    this.setState({ selectedGenre: genre, currentPage: 1 })
+  }
+
+  
 
   render() {
     const { length: count } = this.state.movies;
-    const { pageSize, currentPage, movies: allMovies, genres } = this.state;
+    const { pageSize, currentPage, selectedGenre, movies: allMovies } = this.state;
 
     if (count === 0)
       return <p className="m-2 p-4">There are no movies in the database</p>;
 
-    const movies = paginate(allMovies, currentPage, pageSize);
+    const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(movie => movie.genre._id === selectedGenre._id) : allMovies
+    const movies = paginate(filtered, currentPage, pageSize);
     // console.log(movies)
 
     return (
       <div className="row ml-2 mr-2">
         <div className="col-2 mt-3">
-          <Genres
-            genres={genres}
-            onGenreChange={this.changeGenreList}
-            selectedGenre={this.state.selectedGenre}
+          <Listgroup
+          items={this.state.genres}
+          selectedItem={this.state.selectedGenre}
+          onItemSelect={this.handleGenreSelect}
+            
           />
         </div>
         <div className="col">
-          <p className="m-2 p-2">Showing {count} movies in the database</p>
+          <p className="m-2 p-2">Showing {filtered.length} movies in the database</p>
           <table className="table">
             <thead>
               <tr>
@@ -106,7 +104,7 @@ class Movies extends Component {
             </tbody>
           </table>
           <Pagination
-            itemsCount={count}
+            itemsCount={filtered.length}
             pageSize={pageSize}
             currentPage={currentPage}
             onPageChange={this.handlePageChange}
